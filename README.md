@@ -1,7 +1,7 @@
 # Query Examples
-# Remember to change fields: index, sourcetype, L_bluemixServiceName, etc
+Remember to change fields: index, sourcetype, L_bluemixServiceName, etc
 
-## [Percentage of rows](https://answers.splunk.com/answers/611632/calculate-percentage-in-every-row-adding-two-searc.html)
+### [Percentage of rows](https://answers.splunk.com/answers/611632/calculate-percentage-in-every-row-adding-two-searc.html)
 <pre>
 index="[insert_index_here]" sourcetype="bluemix:rtr" L_bluemixServiceName="[insert_service_name_here]" L_status!=2* L_reqURLpath=/health 
 | rangemap field=L_responseTimeSec "1) <0.5 sec"=0-0.5 "2) 0.5 to 1 sec"=0.5-1 "3) 1 to 3 sec"=1-3 "4) 3 to 5 sec"=3-5 "5) 5 to 10 sec"=5-10 "6) 10 to 30 sec"=10-30 "7) 30 to 60 sec"=30-60 "8) 60 to 120 sec"=60-120 default="9) >120 sec" 
@@ -10,14 +10,14 @@ index="[insert_index_here]" sourcetype="bluemix:rtr" L_bluemixServiceName="[inse
 | eval percentage= (transactions/total)*100
 </pre>
 
-## Group By
+### Group By
 <pre>
 index="[insert_index_here]" sourcetype="bluemix:rtr" L_reqURLpath!="/health" 
 | rangemap field=L_responseTimeSec "1) <0.5 sec"=0-0.5 "2) 0.5 to 1 sec"=0.5-1 "3) 1 to 3 sec"=1-3 "4) 3 to 5 sec"=3-5 "5) 5 to 10 sec"=5-10 "6) 10 to 60 sec"=10-60 "7) 60 to 120 sec"=60-120 default="8) >120 sec" 
 | chart count by L_status,L_bluemixServiceName
 </pre>
 
-## Aggregation
+### Aggregation
 <pre>
 index="[insert_index_here]" sourcetype="bluemix:RTR" L_bluemixServiceName="[insert_service_name_here]" L_status!=2*
 | eval convertedTime = strptime(date_month + " " + date_mday + " " + date_year, "%B %d %Y")
@@ -25,7 +25,7 @@ index="[insert_index_here]" sourcetype="bluemix:RTR" L_bluemixServiceName="[inse
 | stats avg(L_responseTimeSec), median(L_responseTimeSec), min(L_responseTimeSec), max(L_responseTimeSec)   by L_bluemixServiceName , time
 </pre>
 
-## Get aggregation for count
+### Get aggregation for count
 <pre>
 index="[insert_index_here]" sourcetype=bluemix:rtr L_reqURLpath=/health  L_bluemixServiceName="[insert_service_name_here]"
 | eval convertedTime = strptime(date_month + " " + date_mday + " " + date_year, "%B %d %Y")
@@ -42,7 +42,7 @@ index="[insert_index_here]" sourcetype=bluemix:rtr L_reqURLpath=/health  L_bluem
 | fields L_bluemixServiceName, time, L_status, L_appIndex, countService, meanService, stdService, medianService, maxService, minService
 </pre>
 
-## Volume of Traffic
+### Volume of Traffic
 <pre>
 index="[insert_index_here]" sourcetype="bluemix:RTR" L_bluemixServiceName="[insert_service_name_here]"
 | eval convertedTime = strptime(date_month + " " + date_mday + " " + date_year, "%B %d %Y")
@@ -51,16 +51,16 @@ index="[insert_index_here]" sourcetype="bluemix:RTR" L_bluemixServiceName="[inse
 </pre>
 
 # Functions
-## [Associate](https://docs.splunk.com/Documentation/Splunk/7.2.4/SearchReference/Associate)  
+### [Associate](https://docs.splunk.com/Documentation/Splunk/7.2.4/SearchReference/Associate)  
 	• "Identify correlations between fields using entropy based on field's values"
 
-## [Correlate](https://docs.splunk.com/Documentation/Splunk/7.2.4/SearchReference/Correlate)
+### [Correlate](https://docs.splunk.com/Documentation/Splunk/7.2.4/SearchReference/Correlate)
 	• "Does not identify contents of the fields"
 	• "Represents the percentage of times that the two fields exist in the same events"
 
 
 # Visualizations
-## Count of L_staus vs Time
+### Count of L_staus vs Time
 <pre>
 index="[insert_index_here]" sourcetype="bluemix:RTR"  L_status=4* OR L_status=5*  L_routeEnvKP=preprod L_reqURLpath!="/health"  L_bluemixServiceName!="[insert_service_name_here]" 
 | timechart  span=1h limit=20 count by  L_status
