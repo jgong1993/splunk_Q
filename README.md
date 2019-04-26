@@ -9,6 +9,8 @@ index="[insert_index_here]" sourcetype="bluemix:rtr" L_bluemixServiceName="[inse
 | eventstats sum(transactions) as total
 | eval percentage= (transactions/total)*100
 </pre>
+![1. Percentage of rows - Not as precise time frame](https://github.com/jgong1993/splunk_Q/blob/master/GH_Pics/Percentage%20of%20Rows.PNG)
+
 
 ### 2. Transaction per Status - Using more precise time frame
 <pre>
@@ -16,7 +18,8 @@ index="[insert_index_here]" L_bluemixServiceName="[insert_service_name_here]" so
 | rangemap field=L_responseTimeSec "1) <0.5 sec"=0-0.5 "2) 0.5 to 1 sec"=0.5-1 "3) 1 to 3 sec"=1-3 "4) 3 to 5 sec"=3-5 "5) 5 to 10 sec"=5-10 "6) 10 to 20 sec"=10-20 "7) 20 to 30 sec"=20-30 "8) 30 to 60 sec"=30-60 "9) 60 to 120 sec"=60-120 default="10) >120 sec" 
 | stats values(L_bluemixServiceName), values(L_route), count as "Number of Transactions" by range, L_status, L_reqURLpath
 </pre>
-![2. Transaction per Status - Using more precise time frame](https://github.com/jgong1993/splunk_Q/blob/master/GH_Pics/Transaction%20per%20Status.PNG)
+![2. Transaction per Status](https://github.com/jgong1993/splunk_Q/blob/master/GH_Pics/Transaction%20per%20Status.PNG)
+
 
 ### 3. Distribution of Instances
 <pre>
@@ -32,6 +35,7 @@ index=bluemixapps_* sourcetype=bluemix:RTR
 | eventstats perc75(L_appIndex) perc25(L_appIndex) by time, L_status
 | fields - total, NumOfInstances
 </pre>
+![3. Distribution of Instances](https://github.com/jgong1993/splunk_Q/blob/master/GH_Pics/Distribution%20of%20Instances.PNG)
 
 ### 4. Group By
 <pre>
