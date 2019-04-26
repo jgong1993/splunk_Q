@@ -37,12 +37,14 @@ index=bluemixapps_* sourcetype=bluemix:RTR
 </pre>
 ![3. Distribution of Instances](https://github.com/jgong1993/splunk_Q/blob/master/GH_Pics/Distribution%20of%20Instances.PNG)
 
-### 4. Group By
+### 4. Count of BluemixServiceName per L_status
 <pre>
 index="[insert_index_here]" sourcetype="bluemix:rtr" L_reqURLpath!="/health" 
 | rangemap field=L_responseTimeSec "1) <0.5 sec"=0-0.5 "2) 0.5 to 1 sec"=0.5-1 "3) 1 to 3 sec"=1-3 "4) 3 to 5 sec"=3-5 "5) 5 to 10 sec"=5-10 "6) 10 to 60 sec"=10-60 "7) 60 to 120 sec"=60-120 default="8) >120 sec" 
 | chart count by L_status,L_bluemixServiceName
 </pre>
+![4. Count of BluemixServiceName per L_status](https://github.com/jgong1993/splunk_Q/blob/master/GH_Pics/Count%20of%20BluemixServiceName%20per%20L_status.PNG)
+
 
 ### 5. Aggregation
 <pre>
@@ -51,8 +53,9 @@ index="[insert_index_here]" sourcetype="bluemix:RTR" L_bluemixServiceName="[inse
 | eval time = strftime(convertedTime, "%B %d %Y")
 | stats avg(L_responseTimeSec), median(L_responseTimeSec), min(L_responseTimeSec), max(L_responseTimeSec)   by L_bluemixServiceName , time
 </pre>
+![5. Aggregation](https://github.com/jgong1993/splunk_Q/blob/master/GH_Pics/Aggregation.PNG)
 
-### 6. Get aggregation for count
+### 6. Aggregation for Count
 <pre>
 index="[insert_index_here]" sourcetype=bluemix:rtr L_reqURLpath=/health  L_bluemixServiceName="[insert_service_name_here]"
 | eval convertedTime = strptime(date_month + " " + date_mday + " " + date_year, "%B %d %Y")
@@ -68,21 +71,14 @@ index="[insert_index_here]" sourcetype=bluemix:rtr L_reqURLpath=/health  L_bluem
 | eventstats min(countService) as minService by time, L_status
 | fields L_bluemixServiceName, time, L_status, L_appIndex, countService, meanService, stdService, medianService, maxService, minService
 </pre>
+![6. Aggregation for Count](https://github.com/jgong1993/splunk_Q/blob/master/GH_Pics/Aggregationt%20fort%20Count.PNG)
 
-### 7. Volume of Traffic
-<pre>
-index="[insert_index_here]" sourcetype="bluemix:RTR" L_bluemixServiceName="[insert_service_name_here]"
-| eval convertedTime = strptime(date_month + " " + date_mday + " " + date_year, "%B %d %Y")
-| eval time = strftime(convertedTime, "%B %d %Y")
-| stats count(L_bluemixServiceName) as volume  avg(volume) , median(volume), stdev(volume), min(volume), max(volume)   by L_bluemixServiceName
-</pre>
-
-
-### 8. Count of L_status vs Time
+### 7. Count of L_status vs Time
 <pre>
 index="[insert_index_here]" sourcetype="bluemix:RTR"  L_status=4* OR L_status=5*  L_routeEnvKP=preprod L_reqURLpath!="/health"  L_bluemixServiceName!="[insert_service_name_here]" 
 | timechart  span=1h limit=20 count by  L_status
 </pre>
+![7. Count of L_status vs Time](https://github.com/jgong1993/splunk_Q/blob/master/GH_Pics/Count%20of%20L_status%20vs%20Time.PNG)
 
 # Functions
 ### [Associate](https://docs.splunk.com/Documentation/Splunk/7.2.4/SearchReference/Associate)  
