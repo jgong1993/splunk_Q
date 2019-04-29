@@ -71,7 +71,7 @@ index="[insert_index_here]" sourcetype=bluemix:rtr L_reqURLpath=/health  L_bluem
 | eventstats min(countService) as minService by time, L_status
 | fields L_bluemixServiceName, time, L_status, L_appIndex, countService, meanService, stdService, medianService, maxService, minService
 </pre>
-![6. Aggregation for Count](https://github.com/jgong1993/splunk_Q/blob/master/GH_Pics/Aggregationt%20for%20Count.PNG)
+![6. Aggregation for Count](https://github.com/jgong1993/splunk_Q/blob/master/GH_Pics/Aggregation%20for%20Count.PNG)
 
 ### 7. Count of L_status vs Time
 <pre>
